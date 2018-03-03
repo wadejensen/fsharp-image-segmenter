@@ -1,0 +1,17 @@
+.idea
+.vs
+
+FSharpPureSegmenter/bin
+FSharpPureSegmenter/obj
+
+FSharpImpureSegmenter/bin
+FSharpImpureSegmenter/obj
+
+CSharpImpureSegmenter/bin
+CSharpImpureSegmenter/obj
+
+FSharpPureSegmenter.UnitTests/bin
+FSharpPureSegmenter.UnitTests/obj
+
+CSharpSegmenter/bin/
+CSharpSegmenter/obj/
