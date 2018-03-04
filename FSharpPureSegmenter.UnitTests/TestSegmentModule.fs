@@ -135,7 +135,7 @@ type TestStdDev () =
     [<TestMethod>] member this.TestStdDev124 () = approximatelyEqual([32.09750769; 39.23646263; 30.72763414], stddev segment120)
 
 
-(*
+
 [<TestClass>]
 type TestMerge () =
     let mergeCost = SegmentModule.mergeCost
@@ -260,4 +260,3 @@ type TestMerge () =
     [<TestMethod>] member this.TestMergeCost118 () = Assert.AreEqual(137.8366499221, mergeCost pixel10 segment38, epsilon)
     [<TestMethod>] member this.TestMergeCost119 () = Assert.AreEqual(180.2629320353, mergeCost pixel01 segment39, epsilon)
     [<TestMethod>] member this.TestMergeCost120 () = Assert.AreEqual(180.2629320353, mergeCost pixel01 segment40, epsilon)  
-*)
