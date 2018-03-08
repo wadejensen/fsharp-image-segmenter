@@ -7,7 +7,6 @@ open MockFunctions
 open SegmentModule
 
 (*
-
 [<TestClass>]
 type TestFindRoot () =
     let findRoot = SegmentationModule.findRoot
@@ -15884,7 +15883,7 @@ type TestFindRoot () =
     [<TestMethod>] member this.TestFindRoot15870 () = compareSegments(segment120, findRoot segmentation126 segment120)
     [<TestMethod>] member this.TestFindRoot15871 () = compareSegments(segment120, findRoot segmentation127 segment120)
     [<TestMethod>] member this.TestFindRoot15872 () = compareSegments(segment120, findRoot segmentation128 segment120)
-
+*)
 [<TestClass>]
 type TestCreatePixelMap () =
     let pixelMap = SegmentationModule.createPixelMap tiffImage1
@@ -16271,7 +16270,7 @@ type TestCreateBestNeighbourFunction () =
     [<TestMethod>] member this.TestCreateBestNeighbourFunction182 () = compareSets(Set [segment03], bestNeighbours segmentation127 segment08)
     [<TestMethod>] member this.TestCreateBestNeighbourFunction183 () = compareSets(Set [segment08], bestNeighbours segmentation128 segment04)
     [<TestMethod>] member this.TestCreateBestNeighbourFunction184 () = compareSets(Set [segment04], bestNeighbours segmentation128 segment08)
-
+(*
 [<TestClass>]
 type TestCreateTryGrowOneSegmentFunction () =
     let tryGrowOneSegment = SegmentationModule.createTryGrowOneSegmentFunction dummyBestNeighbours dummyPixelMap
