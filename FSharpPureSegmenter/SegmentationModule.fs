@@ -138,17 +138,47 @@ let createTryGrowOneSegmentFunction (bestNeighbours:Segmentation->Segment->Set<S
 // Try to grow the segments corresponding to every pixel on the image in turn 
 // (considering pixel coordinates in special dither order)
 let createTryGrowAllCoordinatesFunction (tryGrowPixel:Segmentation->Coordinate->Segmentation) (N:int) : (Segmentation->Segmentation) =
-    raise (System.NotImplementedException())
-    // Fixme: add implementation here
+    fun (segmentation : Segmentation) ->
+        // Get all the coordinates within the image in dither order
+        let coordsInDitherOrder: (int * int) seq = DitherModule.coordinates N
+        // Perform a single pass over the image and attempt to merge segments
+        Seq.fold tryGrowPixel segmentation coordsInDitherOrder
 
 
 // Keep growing segments as above until no further merging is possible
 let createGrowUntilNoChangeFunction (tryGrowAllCoordinates:Segmentation->Segmentation) : (Segmentation->Segmentation) =
-    raise (System.NotImplementedException())
-    // Fixme: add implementation here
+    let rec growUntilFullySegmented (segmentation : Segmentation) : Segmentation =
+        // Perform one iteration of merging
+        let newSegmentation = tryGrowAllCoordinates segmentation
+        
+        // if the result is the same as the previous segmentation then we have fully segmented
+        if newSegmentation = segmentation then segmentation
+        // otherwise continue merging
+        else growUntilFullySegmented newSegmentation
+    
+    growUntilFullySegmented
 
 
 // Segment the given image based on the given merge cost threshold, but only for the top left corner of the image of size (2^N x 2^N)
 let segment (image:TiffModule.Image) (N: int) (threshold:float)  : (Coordinate -> Segment) =
-    raise (System.NotImplementedException())
-    // Fixme: use the functions above to help implement this function
+    fun (coord: Coordinate) ->
+    
+        printfn "%i" (System.DateTimeOffset(System.DateTime.Now).ToUnixTimeMilliseconds())
+
+        // Build the segmenter application logic by functional dependency injection
+        let pixelMap: Coordinate -> Segment = createPixelMap image
+        
+        let neighbourFinder = createNeighboursFunction pixelMap N
+        let bestNeighbourFinder = createBestNeighbourFunction neighbourFinder threshold
+        let growSinglePixel = createTryGrowOneSegmentFunction bestNeighbourFinder pixelMap
+        let tryGrowAllSegments = createTryGrowAllCoordinatesFunction growSinglePixel N
+        let segmenter = createGrowUntilNoChangeFunction tryGrowAllSegments
+        
+        let emptySegmentation = Map.empty<Segment, Segment>
+        
+        let resultSegmentation = segmenter emptySegmentation
+        
+        // return the root segment of the result segmentation which corresponds 
+        // to the input pixel
+        findRoot resultSegmentation (pixelMap coord)
+        
