@@ -9,6 +9,24 @@ let setFilterNot (predicate: 'a -> bool) (elems: 'a Set) : 'a Set =
     Set.filter flippedPredicate elems
 
 
+let setSafeMin (elems: 'a Set): 'a option =
+    let elemsSeq = List.ofSeq elems
+    match elemsSeq.Length with
+    | 0 -> None
+    | _ -> Some (Set.minElement elems)
+ 
+ 
+let listSafeMinBy (ordering: 'a -> float) (elems: 'a list): 'a option =
+    match elems.Length with 
+    | 0 -> None
+    | _ -> Some(List.minBy ordering elems) 
+
+
+let setSafeMinBy (ordering: 'a -> float) (elems: 'a Set) : 'a option =
+    elems
+    |> List.ofSeq
+    |> listSafeMinBy ordering
+
 // Math helpers
 let square x: float = x * x
 
