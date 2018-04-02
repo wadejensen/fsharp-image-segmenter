@@ -1,4 +1,4 @@
-module SegmentModule
+﻿module SegmentModule
 open System
 open System.Security.Cryptography
 open UtilModule
@@ -11,13 +11,13 @@ type Segment =
     | Parent of Segment * Segment
 
 // determine whether a Segment is a Pixel or a Parent
-let isPixel (segment: Segment): bool =
+let isPixel (segment: Segment) : bool =
     match segment with
     | Pixel (_, _) -> true
     | Parent (_, _) ->  false
 
 // Destructure a Segment to get pixel colour
-let getPixelColourFromSegment (segment: Segment): Colour option =
+let getPixelColourFromSegment (segment: Segment) : Colour option =
     match segment with
     | Pixel (_, colour) -> Some colour
     | _ ->  None
@@ -71,7 +71,7 @@ let transpose (listOfLists: 'a list list) : 'a list list  =
 
 
 // Calculates the statistical standard deviation of a list of numbers
-let standardDeviation (elems: float list): float =
+let standardDeviation (elems: float list) : float =
     elems
     |> List.map (fun x -> x - (List.average elems) )
     |> List.map square
