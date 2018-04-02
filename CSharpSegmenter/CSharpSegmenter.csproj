@@ -1,12 +1,15 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="BitMiracle.LibTiff.NET" Version="2.4.584.1" />
   </ItemGroup>
-
+  <ItemGroup>
+    <ProjectReference Include="..\FSharpPureSegmenter\FSharpPureSegmenter.fsproj">
+      <Project>{D8D8B0BC-54DF-461F-BB30-C8916AFA1EC3}</Project>
+      <Name>FSharpPureSegmenter</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>
