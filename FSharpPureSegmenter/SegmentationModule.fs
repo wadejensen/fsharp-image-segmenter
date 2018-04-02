@@ -7,10 +7,14 @@ open SegmentModule
 type Segmentation = Map<Segment, Segment>
 
 // Find the largest/top level segment that the given segment is a part of (based on the current segmentation)
-let rec findRoot (segmentation: Segmentation) segment : Segment =
-    raise (System.NotImplementedException())
-    // Fixme: add implementation here
-
+let rec findRoot (segmentation: Segmentation) (segment : Segment) =
+    let maybeParent: Segment option = Map.tryFind segment segmentation
+    // Recursely traverse map until the Segmentation does not contain the parent, then we can return the segment as
+    // it must be the root
+    match maybeParent with
+    | Some parent -> findRoot segmentation parent
+    | None -> segment
+    
 
 // Initially, every pixel/coordinate in the image is a separate Segment
 // Note: this is a higher order function which given an image, 
