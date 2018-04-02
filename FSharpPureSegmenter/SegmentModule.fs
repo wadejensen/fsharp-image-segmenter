@@ -1,6 +1,7 @@
-﻿module SegmentModule
+module SegmentModule
 open System
 open System.Security.Cryptography
+open UtilModule
 
 type Coordinate = (int * int) // x, y coordinate of a pixel
 type Colour = byte list       // one entry for each colour band, typically: [red, green and blue]
@@ -47,14 +48,10 @@ let getAllPixelsFromSegment(segment: Segment): byte list list =
     // get pixels as [ [r0; g0; b0]; [r1; g1; b1]; [r2; g2; b2]; [r3; g3; b3]; ... [rN; gN; bN] ]
     List.choose getPixelColourFromSegment leafSegments
 
-// Math helpers
-let square x = x * x
 
 // Divide the second argument by the first argument (useful as a pipeline operator)
 let divideBy y x: float = x / y
 
-// Multiply the second argument by the first argument (useful as a pipeline operator)
-let multiplyBy x y: float = x * y
 
 // Calculates the statistical standard deviation of a list of numbers
 let standardDeviation (elems: float list): float =

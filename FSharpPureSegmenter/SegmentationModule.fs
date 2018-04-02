@@ -1,5 +1,6 @@
-﻿module SegmentationModule
+module SegmentationModule
 
+open UtilModule
 open SegmentModule
 
 // Maps segments to their immediate parent segment that they are contained within (if any) 
