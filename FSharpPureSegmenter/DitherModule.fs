@@ -24,7 +24,7 @@ let evenBits v =
     List.fold (extractBit v) 0 [0 .. 2 .. maxBit]
 
 // returns the coordinates of all pixels in the image in special dither order
-let coordinates N =
+let coordinates N : (int * int) seq =
     let width = 1 <<< N
     let height = 1 <<< N
     seq { 
