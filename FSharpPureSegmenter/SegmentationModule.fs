@@ -65,8 +65,28 @@ let createNeighboursFunction (pixelMap:Coordinate->Segment) (N:int) : (Segmentat
  // Find the neighbour(s) of the given segment that has the (equal) best merge cost
  // (exclude neighbours if their merge cost is greater than the threshold)
 let createBestNeighbourFunction (neighbours:Segmentation->Segment->Set<Segment>) (threshold:float) : (Segmentation->Segment->Set<Segment>) =
-    raise (System.NotImplementedException())
-    // Fixme: add implementation here
+    (fun (segmentation : Segmentation) (segment : Segment) ->
+        let segmentNeighbours: Segment Set = neighbours segmentation segment
+        
+        // create a tuple of neighbours and their merge costs
+        let segmentNeighboursAndMergeCosts: (Segment * float) Set = 
+            segmentNeighbours
+            |> Set.map (fun (neighbour: Segment) -> (neighbour, (mergeCost neighbour segment)) )
+        
+        let mergeCosts = segmentNeighboursAndMergeCosts |> Set.map snd
+        
+        // get min merge cost or None
+        let maybeBestCost = setSafeMin mergeCosts
+        
+        match maybeBestCost with
+        // If merge cost exists, return neighbours with equal best cost
+        | Some bestCost -> segmentNeighboursAndMergeCosts
+                           |> Set.filter (fun tuple -> (snd tuple) = bestCost)
+                           |> Set.filter (fun tuple -> (snd tuple) <= threshold)
+                           |> Set.map fst
+        // otherwise no best neighbours
+        | None -> Set.empty
+    )                           
 
 
 // Try to find a neighbouring segmentB such that:
