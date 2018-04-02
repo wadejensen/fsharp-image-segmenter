@@ -88,6 +88,20 @@ let createBestNeighbourFunction (neighbours:Segmentation->Segment->Set<Segment>)
         | None -> Set.empty
     )                           
 
+// Determine whether segmentA is one of the best neighbours of segmentB
+let bestNeighbourChecker (bestNeighbours : Segmentation->Segment->Set<Segment>) (segmentation : Segmentation) : Segment->Segment->bool =
+    fun (segmentA: Segment) (segmentB: Segment) -> 
+        let bestNeighboursOfSegmentB = bestNeighbours segmentation segmentB
+        Set.contains segmentA bestNeighboursOfSegmentB    
+    
+// Merge two segments by creating their parent and adding them to the segmentation
+let mergeSegments (segmentation : Segmentation) (segmentA: Segment) (segmentB: Segment) : Segmentation =
+    let parent = Parent(segmentA, segmentB)
+    
+    segmentation
+    |> Map.add segmentA parent
+    |> Map.add segmentB parent
+
 
 // Try to find a neighbouring segmentB such that:
 //     1) segmentB is one of the best neighbours of segment A, and 
@@ -95,10 +109,32 @@ let createBestNeighbourFunction (neighbours:Segmentation->Segment->Set<Segment>)
 // if such a mutally optimal neighbour exists then merge them,
 // otherwise, choose one of segmentA's best neighbours (if any) and try to grow it instead (gradient descent)
 let createTryGrowOneSegmentFunction (bestNeighbours:Segmentation->Segment->Set<Segment>) (pixelMap:Coordinate->Segment) : (Segmentation->Coordinate->Segmentation) =
-    raise (System.NotImplementedException())
-    // Fixme: add implementation here
-
-
+    fun (segmentation : Segmentation) (coord : Coordinate) -> 
+        let initialSegment = findRoot segmentation (pixelMap coord)
+    
+        let rec tryGrowOneSegment (segmentation: Segmentation) (segmentA: Segment) : Segmentation =              
+            // The best neighbours of SegmentA
+            let segmentABestNeighbours: Segment Set = bestNeighbours segmentation segmentA
+             
+            if segmentABestNeighbours.IsEmpty then 
+                segmentation
+            else
+                // A function which returns true when SegmentA is one of a given Segment's best neighbours
+                let checkBestNeighboursIncudesSegmentA = bestNeighbourChecker bestNeighbours segmentation segmentA
+                
+                // the mutually optimal neighbours of SegmentA
+                let mutuallyOptimalNeighbours = Set.filter checkBestNeighboursIncudesSegmentA segmentABestNeighbours
+                
+                // if there is one mutually optimal neighbour, merge segments A and B
+                // if there are none choose a best neighbour and try to grow it instead
+                // if theres is more then one, pick one and try to and grow it instead
+                match List.ofSeq mutuallyOptimalNeighbours with
+                | [segmentB] -> mergeSegments segmentation segmentA segmentB
+                | [] -> tryGrowOneSegment segmentation (List.ofSeq segmentABestNeighbours).Head
+                | segment :: _ -> tryGrowOneSegment segmentation segment
+                     
+        tryGrowOneSegment segmentation initialSegment
+         
 // Try to grow the segments corresponding to every pixel on the image in turn 
 // (considering pixel coordinates in special dither order)
 let createTryGrowAllCoordinatesFunction (tryGrowPixel:Segmentation->Coordinate->Segmentation) (N:int) : (Segmentation->Segmentation) =
