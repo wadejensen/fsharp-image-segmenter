@@ -20,20 +20,47 @@ let rec findRoot (segmentation: Segmentation) (segment : Segment) =
 // Note: this is a higher order function which given an image, 
 // returns a function which maps each coordinate to its corresponding (initial) Segment (of kind Pixel)
 let createPixelMap (image:TiffModule.Image) : (Coordinate -> Segment) =
-    raise (System.NotImplementedException())
-    // Fixme: add implementation here
+    fun (coord: Coordinate) -> Pixel(coord, TiffModule.getColourBands image coord)
+    
+
+// Determine whether a given segment is the highest level parent of another segment using a Segmentation map
+let segmentIsRootOf (segmentation: Segmentation) (expectedRoot: Segment) (child: Segment) : bool = 
+    let root = findRoot segmentation child
+    root = expectedRoot
+
+ 
+// Ensure a coordinate lies within the bounds of an image given a max coordinate value    
+let isCoordWithinImage (max : int) (coord : Coordinate) : bool =
+    match coord with (x,y) -> (0 <= x) && (x <= max) && (0 <= y) && (y <= max)
+
+
+// Return the vertically and horizontally adjacent pixel coordinates (no diagonals)
+let getAdjacentCoords (maxPixelCoord : int) (coord : Coordinate) : Coordinate list =
+    let adjacentsCoords = match coord with (x,y) -> [(x+1, y); (x-1, y); (x, y+1); (x, y-1)]
+    List.filter (isCoordWithinImage maxPixelCoord) adjacentsCoords
 
 
 // Find the neighbouring segments of the given segment (assuming we are only segmenting the top corner of the image of size 2^N x 2^N)
 // Note: this is a higher order function which given a pixelMap function and a size N, 
 // returns a function which given a current segmentation, returns the set of Segments which are neighbours of a given segment
 let createNeighboursFunction (pixelMap:Coordinate->Segment) (N:int) : (Segmentation -> Segment -> Set<Segment>) =
-    raise (System.NotImplementedException())
-    // Fixme: add implementation here
-
-
-// The following are also higher order functions, which given some inputs, return a function which ...
-
+    (fun (segmentation : Segmentation) (segment: Segment) -> 
+        // get all bottom level child segments
+        let leafSegments = foldSegment(segment)
+        // safely convert to pixels
+        let coords = List.choose getPixelCoordFromSegment leafSegments
+        
+        // get list of 4 adjacent pixels for each pixel and apply distinct operator via Set constructor
+        let maxPixelCoord = int(2.0 ** float(N)-1.0)
+        let possibleAdjacentCoords = List.collect (getAdjacentCoords maxPixelCoord) coords |> Set.ofList
+        let possibleAdjacentSegments: Segment Set = Set.map pixelMap possibleAdjacentCoords
+        
+        // Takes two Segments and determines whether the second Segment has the first as its root Segment
+        let hasRoot : (Segment -> Segment -> bool) = segmentIsRootOf segmentation
+        
+        let adjacentSegments = setFilterNot (hasRoot segment) possibleAdjacentSegments
+        Set.map (findRoot segmentation) adjacentSegments
+     )
 
  // Find the neighbour(s) of the given segment that has the (equal) best merge cost
  // (exclude neighbours if their merge cost is greater than the threshold)
