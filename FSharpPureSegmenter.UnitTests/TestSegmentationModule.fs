@@ -6,7 +6,6 @@ open TestHelperFunctions
 open MockFunctions
 open SegmentModule
 
-(*
 
 [<TestClass>]
 type TestFindRoot () =
@@ -17169,5 +17168,3 @@ type TestCreateFourNeighboursFunction () =
     let segmentation = Map.empty
     let neighbours = SegmentationModule.createNeighboursFunction  dummyPixelMap2 2
     [<TestMethod>] member this.TestCreateNeighboursFunction01 () = compareSets(Set [pixel01; pixel21; pixel10; pixel12], neighbours segmentation pixel11)
-
-*)
