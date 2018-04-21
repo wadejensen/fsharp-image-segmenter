@@ -34,4 +34,3 @@ let coordinates N : (int * int) seq =
               let y = x ^^^ evenBits r
               yield x, y
         }
-

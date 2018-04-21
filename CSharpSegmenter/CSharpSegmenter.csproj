@@ -7,9 +7,6 @@
     <PackageReference Include="BitMiracle.LibTiff.NET" Version="2.4.584.1" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FSharpPureSegmenter\FSharpPureSegmenter.fsproj">
-      <Project>{D8D8B0BC-54DF-461F-BB30-C8916AFA1EC3}</Project>
-      <Name>FSharpPureSegmenter</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\FSharpImpureSegmenter\FSharpImpureSegmenter.fsproj" />
   </ItemGroup>
 </Project>

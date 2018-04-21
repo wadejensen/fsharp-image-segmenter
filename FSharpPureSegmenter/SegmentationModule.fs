@@ -28,7 +28,7 @@ let segmentIsRootOf (segmentation: Segmentation) (expectedRoot: Segment) (child:
     let root = findRoot segmentation child
     root = expectedRoot
 
- 
+
 // Ensure a coordinate lies within the bounds of an image given a max coordinate value    
 let isCoordWithinImage (max : int) (coord : Coordinate) : bool =
     match coord with (x,y) -> (0 <= x) && (x <= max) && (0 <= y) && (y <= max)
@@ -110,12 +110,36 @@ let mergeSegments (segmentation : Segmentation) (segmentA: Segment) (segmentB: S
 // otherwise, choose one of segmentA's best neighbours (if any) and try to grow it instead (gradient descent)
 let createTryGrowOneSegmentFunction (bestNeighbours:Segmentation->Segment->Set<Segment>) (pixelMap:Coordinate->Segment) : (Segmentation->Coordinate->Segmentation) =
     fun (segmentation : Segmentation) (coord : Coordinate) -> 
+//        ///// DEBUGGING HELPER
+//        let size = 8
+//        
+//        let coordToCSharpSegment (x : int) (y : int) : CSharpSegment =
+//            let pixel = CSharpPixel x y
+//            CSharpSegment
+        
+        //let segmentationView: CSharpSegment[,] = Array2D.init<Segment> size size ( fun x y -> findRoot (pixelMap )
+        
+        //let xs = [0 .. size-1]
+        //let ys = [0 .. size-1]
+//        
+//        for (x in xs) {
+//        
+//        }
+//        let coords = [0 .. size-1]
+//            |> List.map 
+//        
+        
+        //SegmentationIllustrator
+        
+        
+        
+        //
         let initialSegment = findRoot segmentation (pixelMap coord)
     
         let rec tryGrowOneSegment (segmentation: Segmentation) (segmentA: Segment) : Segmentation =              
             // The best neighbours of SegmentA
             let segmentABestNeighbours: Segment Set = bestNeighbours segmentation segmentA
-             
+
             if segmentABestNeighbours.IsEmpty then 
                 segmentation
             else
@@ -134,7 +158,7 @@ let createTryGrowOneSegmentFunction (bestNeighbours:Segmentation->Segment->Set<S
                 | segment :: _ -> tryGrowOneSegment segmentation segment
                      
         tryGrowOneSegment segmentation initialSegment
-         
+
 // Try to grow the segments corresponding to every pixel on the image in turn 
 // (considering pixel coordinates in special dither order)
 let createTryGrowAllCoordinatesFunction (tryGrowPixel:Segmentation->Coordinate->Segmentation) (N:int) : (Segmentation->Segmentation) =
@@ -161,24 +185,19 @@ let createGrowUntilNoChangeFunction (tryGrowAllCoordinates:Segmentation->Segment
 
 // Segment the given image based on the given merge cost threshold, but only for the top left corner of the image of size (2^N x 2^N)
 let segment (image:TiffModule.Image) (N: int) (threshold:float)  : (Coordinate -> Segment) =
-    fun (coord: Coordinate) ->
+    // Build the segmenter application logic by functional dependency injection
+    let pixelMap: Coordinate -> Segment = createPixelMap image
     
-        printfn "%i" (System.DateTimeOffset(System.DateTime.Now).ToUnixTimeMilliseconds())
-
-        // Build the segmenter application logic by functional dependency injection
-        let pixelMap: Coordinate -> Segment = createPixelMap image
-        
-        let neighbourFinder = createNeighboursFunction pixelMap N
-        let bestNeighbourFinder = createBestNeighbourFunction neighbourFinder threshold
-        let growSinglePixel = createTryGrowOneSegmentFunction bestNeighbourFinder pixelMap
-        let tryGrowAllSegments = createTryGrowAllCoordinatesFunction growSinglePixel N
-        let segmenter = createGrowUntilNoChangeFunction tryGrowAllSegments
-        
-        let emptySegmentation = Map.empty<Segment, Segment>
-        
-        let resultSegmentation = segmenter emptySegmentation
-        
-        // return the root segment of the result segmentation which corresponds 
-        // to the input pixel
-        findRoot resultSegmentation (pixelMap coord)
+    let neighbourFinder = createNeighboursFunction pixelMap N
+    let bestNeighbourFinder = createBestNeighbourFunction neighbourFinder threshold
+    let growSinglePixel = createTryGrowOneSegmentFunction bestNeighbourFinder pixelMap
+    let tryGrowAllSegments = createTryGrowAllCoordinatesFunction growSinglePixel N
+    let segmenter = createGrowUntilNoChangeFunction tryGrowAllSegments
+    
+    let emptySegmentation = Map.empty<Segment, Segment>
+    let segmentation = segmenter emptySegmentation
+    
+    // return the root segment of the result segmentation which corresponds to the input pixel
+    fun (coord: Coordinate) ->
+        findRoot segmentation (pixelMap coord)
         
