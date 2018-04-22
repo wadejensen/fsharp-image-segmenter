@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <Name>FSharpx.Collections</Name>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.fs" />
+    <Compile Include="Library.fs" />
+    <Compile Include="Literals.fs" />
+    <Compile Include="PersistentVector.fs" />
+  </ItemGroup>
+</Project>

@@ -75,6 +75,7 @@ namespace CSharpSegmenter
             return stdDevs;
         }
 
+        // Transform an array of arrays with dimensions n x m into a array of arrays with dimensions m x n
         private byte[][] Transpose(Pixel[] arr, int numPixels, int numBands)
         {
             byte[][] subPixels = new byte[numBands][];
@@ -98,6 +99,7 @@ namespace CSharpSegmenter
             return pixels[0].subPixels.Length;
         }
 
+        // Calculates the statistical standard deviation of a vector of numbers
         private double stdDev(byte[] arr)
         {
             double sum = 0;
@@ -109,28 +111,6 @@ namespace CSharpSegmenter
 
             double variance = sumOfSquareMeanDistances / arr.Length;
             return (double) Math.Sqrt(variance);
-        }
-
-        public override bool Equals(object obj)
-        {
-            // Check for null values and compare run-time types.
-            if (obj == null || this.GetType() != obj.GetType()) 
-                return false;
-
-            Segment other = (Segment) obj;
-            
-            
-            if (this.pixels.Length != other.pixels.Length)
-                return false;
-            
-            // expects pixels to be in the same array order
-            for (int i = 0; i < this.pixels.Length; i++)
-            {
-                if ( !(this.pixels[i] == (other.pixels[i])) )
-                    return false;
-            }
-
-            return true;
         }
     }
 }

@@ -39,6 +39,7 @@ let getChildSegments (segment: Segment) : Segment list =
 let collectChildSegments (segments: Segment list) : Segment list =
     List.collect getChildSegments segments
 
+
 // A function to perform breadth first traversal of a recursive data structure and collect all leaf elements into a list
 // @param descendTreeLayer A function which takes all elements of one layer of a tree structure and returns 
 //                         all elements of the layer below
@@ -67,7 +68,7 @@ let transpose (listOfLists: 'a list list) : 'a list list  =
     listOfLists
     |> List.collect List.indexed
     |> List.groupBy fst
-    |> List.map (snd >> List.map snd);;
+    |> List.map (snd >> List.map snd)
 
 
 // Calculates the statistical standard deviation of a list of numbers
@@ -77,7 +78,7 @@ let standardDeviation (elems: float list) : float =
     |> List.map square
     |> List.sum
     |> divideBy (float(List.length elems))
-    |> Math.Sqrt
+    |> sqrt
 
 
 // return a list of the standard deviations of the pixel colours in the given segment
