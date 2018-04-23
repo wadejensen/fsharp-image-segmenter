@@ -17,17 +17,11 @@ let main argv =
     // increasing this threshold will result in more segment merging and therefore fewer final segments
     let threshold = 800.0
 
-    let sw = new Stopwatch();
-    sw.Start()  
-
     // determine the segmentation for the (top left corner of the) image (2^N x 2^N) pixels
     let segmentation = SegmentationModule.segment image N threshold
 
     // draw the (top left corner of the) original image but with the segment boundaries overlayed in blue
     TiffModule.overlaySegmentation image "segmented.tif" N segmentation
-
-    sw.Stop();
-    Console.WriteLine("Elapsed={0}",sw.Elapsed);
     
     0 // return an integer exit code
     

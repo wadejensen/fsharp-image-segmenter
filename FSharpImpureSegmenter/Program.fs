@@ -22,3 +22,4 @@ let main argv =
     Tiff.overlaySegmentation image "impure-segmented.tif" N segmentation
     
     0 // return an integer exit code
+    
