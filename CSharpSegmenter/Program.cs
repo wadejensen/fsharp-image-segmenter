@@ -9,12 +9,12 @@ namespace CSharpSegmenter
         {
 
             // filepath to the image
-            string imagePath = args[1];
+            string imagePath = args[0];
 
             TiffImage image = new TiffImage(imagePath);
 
             // testing using sub-image of size 32x32 pixels
-            int N = 6;
+            int N = 5;
 
             // increasing this threshold will result in more segment merging and therefore fewer final segments
             double threshold = 800.0;

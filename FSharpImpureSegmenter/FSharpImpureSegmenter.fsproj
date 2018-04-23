@@ -7,10 +7,16 @@
     <DependsOnNETStandard>true</DependsOnNETStandard>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Util.fs" />
+    <Compile Include="Segment.fs" />
+    <Compile Include="Tiff.fs" />
+    <Compile Include="Dither.fs" />
+    <Compile Include="Segmentation.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="BitMiracle.LibTiff.NET" Version="2.4.584.1" />
+    <PackageReference Include="FSharpx.Collections" Version="1.17.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FSharpPureSegmenter\FSharpPureSegmenter.fsproj" />
