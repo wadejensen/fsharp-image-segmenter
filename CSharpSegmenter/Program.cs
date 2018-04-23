@@ -24,15 +24,10 @@ namespace CSharpSegmenter
             // determine the segmentation for the (top left corner of the) image (2^N x 2^N) pixels
             Segment[,] segmentation = segmentor.SegmentImage(image);
 
-            Stopwatch sw = new Stopwatch();
-            sw.Start();            
-            
+                    
             // draw the (top left corner of the) original image but with the segment boundaries overlayed in blue
             image.OverlaySegmentation("csharp-segmented.tif", N, segmentation);
-
-            sw.Stop();
-            Console.WriteLine("Elapsed={0}",sw.Elapsed);
-            
+    
             // return an integer exit code
             return 0; 
         }
