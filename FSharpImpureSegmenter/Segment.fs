@@ -1,75 +1,63 @@
 ﻿module Segment
 
-open FSharpx.Collections
-open Vector
+open System
+open System.Collections.Immutable
 open Util
 
 type Coord = { x: int; y: int } 
 
-type Pixel = { x: int; y: int; subPixels: byte vector }
+type Pixel = { x: int; y: int; subPixels: byte array }
 
-
-let test : Pixel Set = 
-    let p1: Pixel = {x=1; y=1}
-    let p2: Pixel = {x=2; y=2}
-    
-    Set [p1; p2]
+// Project a Pixel down to just a Coord
+let getCoordFromPixel (pixel: Pixel) : Coord = 
+    {x = pixel.x; y = pixel.x}
 
 // A Segment is just a collection of pixels
-type Segment = Pixel vector
+type Segment = Pixel array
 
 // Default Segment constructor
-let Segment (pixel: Pixel) : Segment = Vector.ofSeq [pixel]
+let Segment (pixel: Pixel) : Segment = [| pixel |] 
 
 // Alternative Segment constructor
-let createSegment (segment1: Segment) (segment2: Segment) : Segment = Vector.append segment1 segment2
-    
-
-// Transform a vector of vectors with dimensions n x m into a vector of vectors with dimensions m x n
-let transpose (matrix: 'a vector vector, rows, cols) : 'a vector vector  =
-    // initialise a new 2d vector by reversing row - column access order
-    init2d rows cols (fun (x: int) (y: int) -> Vector.get y x matrix)
+let createSegment (segment1: Segment) (segment2: Segment) : Segment = 
+    Array.concat [segment1; segment2]
     
 
 // Calculates the statistical standard deviation of a vector of numbers
-let standardDeviation (elems: float vector) : float = 
+let standardDeviation (elems: float array) : float = 
     elems
-    |> Vector.map (fun x -> x - (Vector.average elems) )
-    |> Vector.map square
-    |> Vector.sum
-    |> divideBy (float(Vector.length elems))
+    |> Array.map (fun x -> x - (Array.average elems) )
+    |> Array.map square
+    |> Array.sum
+    |> divideBy (float(Array.length elems))
     |> sqrt
 
 
 // return a vector of the standard deviations of the pixel colours in the given segment
 // the list contains one entry for each colour band, typically: [red, green and blue]
 let stddev (segment: Segment) = 
-    let numPixels = Vector.length segment
-    let numBands = Vector.length (Vector.last segment).subPixels
-    
-    // Get all subpixel bytes of the segment, indexed by pixel
-    // expected structure: [ [r0; g0; b0]; [r1; g1; b1]; [r2; g2; b2]; [r3; g3; b3]; ... [rN; gN; bN] ]
-    let pixelsColours = Vector.map (fun (pixel: Pixel) -> pixel.subPixels) segment
+    let numPixels = segment.Length
+    let numBands = (Array.last segment).subPixels.Length
     
     // get all subpixels bytes, grouped by subpixel, expected structure:
     // [ [r0; r1; r2; r3; ... rN]; [g0; g1; g2; g3; ... gN]; [b0; b1; b2; b3; ... bN] ]
-    let subPixelBands: byte vector vector = transpose(pixelsColours, numPixels, numBands)
-    
+    let subPixelBands: byte array array = init2d numPixels numBands (fun (x: int) (y: int) -> segment.[y].subPixels.[x])
+
     let stdDevBands =
         subPixelBands
-        |> Vector.map (Vector.map (fun x -> float x) ) // convert byte to float
-        |> Vector.map standardDeviation
+        |> Array.map (Array.map (fun x -> float x) ) // convert byte to float
+        |> Array.map standardDeviation
     
     stdDevBands
 
 
 // Calculate the contribution of a segment to the merge cost of two segments
 let calculateSegmentWeight (segment: Segment) : float =
-    let subPixelStdDevs: float vector = stddev(segment)
+    let subPixelStdDevs: float array = stddev(segment)
     
     subPixelStdDevs
-    |> Vector.sum
-    |> multiplyBy (float(Vector.length segment))
+    |> Array.sum
+    |> multiplyBy (float(segment.Length))
 
 
 // determine the cost of merging the given segments: 

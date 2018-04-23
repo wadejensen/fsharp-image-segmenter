@@ -7,11 +7,10 @@
     <DependsOnNETStandard>true</DependsOnNETStandard>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Vector.fs" />
     <Compile Include="Util.fs" />
-    <Compile Include="Dither.fs" />
-    <Compile Include="Tiff.fs" />
     <Compile Include="Segment.fs" />
+    <Compile Include="Tiff.fs" />
+    <Compile Include="Dither.fs" />
     <Compile Include="Segmentation.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>

@@ -79,7 +79,7 @@ namespace CSharpSegmenter
         //     2) segmentA is one of the best neighbours of segment B
         // if such a mutally optimal neighbour exists then merge them,
         // otherwise, choose one of segmentA's best neighbours (if any) and try to grow it instead (gradient descent)
-        // Returns true if a change was made to the segmentation, ie. the
+        // Returns true if a change was made to the segmentation, ie. if we need to continue segmenting
         private bool TryGrowSegment(Segment segmentA)
         {
             HashSet<Segment> bestNeighboursofSegmentA = FindBestNeighbours(segmentA);

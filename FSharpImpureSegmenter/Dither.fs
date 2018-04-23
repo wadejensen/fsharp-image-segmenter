@@ -1,5 +1,7 @@
 ﻿module Dither
 
+open Segment
+
 // determine the highest bit position of a standard integer
 let maxBit = sizeof<int>*8-1
 
@@ -24,7 +26,7 @@ let evenBits v =
     List.fold (extractBit v) 0 [0 .. 2 .. maxBit]
 
 // returns the coordinates of all pixels in the image in special dither order
-let coordinates N : (int * int) seq =
+let coordinates N : Coord seq =
     let width = 1 <<< N
     let height = 1 <<< N
     seq { 
@@ -32,5 +34,5 @@ let coordinates N : (int * int) seq =
               let r = reverseBits i (2*N)
               let x = oddBits r
               let y = x ^^^ evenBits r
-              yield x, y
+              yield {x=x; y=y}
         }

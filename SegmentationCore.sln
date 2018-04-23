@@ -18,8 +18,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Performance3.psess = Performance3.psess
 	EndProjectSection
 EndProject
-Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "FSharpx.Collections", "FSharpx.Collections\FSharpx.Collections.fsproj", "{248391B8-B1CF-4167-8172-114F7B56004C}"
-EndProject
 Global
 	GlobalSection(Performance) = preSolution
 		HasPerformanceSessions = true
@@ -45,10 +43,6 @@ Global
 		{100E445D-2CEB-46C3-A054-A7B82ABDE274}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{100E445D-2CEB-46C3-A054-A7B82ABDE274}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{100E445D-2CEB-46C3-A054-A7B82ABDE274}.Release|Any CPU.Build.0 = Release|Any CPU
-		{248391B8-B1CF-4167-8172-114F7B56004C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{248391B8-B1CF-4167-8172-114F7B56004C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{248391B8-B1CF-4167-8172-114F7B56004C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{248391B8-B1CF-4167-8172-114F7B56004C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

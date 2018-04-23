@@ -1,38 +1,30 @@
 ﻿module Program
 
-open FSharpx.Collections
-open FSharpx.Collections.PersistentVector
+open System.Diagnostics
+open System
 
 [<EntryPoint>]
-let main argv =
-//    let x = 5
-//    printfn "%A" x
+let main argv =    
 
-    let twoDeeArr: PersistentVector<PersistentVector<int>> = ofSeq [ ofSeq [1;2;3]; ofSeq [4;5;6]; ofSeq [7;8;9]]
-    
-    for elem in twoDeeArr do
-        for e in elem do
-            printfn "%A" e
-    
-    //printfn "%A" "" |> ignore
-    
-    
-    let myArrayofArrays = PersistentVector.init 3 (fun x -> PersistentVector.init 3 (fun y -> PersistentVector.nthNth y x twoDeeArr))
-    
-    let xs = [1 .. 3]
-    let ys = [1 .. 3]
+    // load a Tiff image
+    let image = Tiff.loadImage "C:\Users\WadeJensen\Dropbox\01_EN40\YEAR_5_SEM_1\SegmentationSkeleton\TestImages\L15-3662E-1902N-Q4.tif" //argv.[0]
 
-    for x in xs do
-        for y in ys do
-            let value = myArrayofArrays.[x,y]
-            printfn "%A" value
+    // testing using sub-image of size 32x32 pixels
+    let N = 4
+
+    // increasing this threshold will result in more segment merging and therefore fewer final segments
+    let threshold = 800.0
+
+    let sw = new Stopwatch();
+    sw.Start()  
+
+    // determine the segmentation for the (top left corner of the) image (2^N x 2^N) pixels
+    let segmentation = Segmentation.segmentImage image N threshold
+
+    // draw the (top left corner of the) original image but with the segment boundaries overlayed in blue
+    Tiff.overlaySegmentation image "segmented.tif" N segmentation
+
+    sw.Stop();
+    Console.WriteLine("Elapsed={0}",sw.Elapsed);
     
-    for elem in myArrayofArrays do
-        for e in elem do
-            printfn "%A" e    
-        
-    //let v: int IPersistentVector = [1,2,3,4]
-    
-    //raise (System.NotImplementedException())
-    // Fixme: add implementation here
     0 // return an integer exit code

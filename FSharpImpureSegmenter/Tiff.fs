@@ -2,6 +2,8 @@
 
 open BitMiracle.LibTiff.Classic
 
+open Segment
+
 type Image = { width: int; height: int; raster: int array }
 
 
@@ -17,7 +19,7 @@ let getColour image (x,y) =
 // return list of colour components for pixel (x,y), with one entry for each colour band: red, green and blue
 let getColourBands image (x,y) =
     let abgr = getColour image (x,y)
-    [(byte (Tiff.GetR abgr)); (byte (Tiff.GetG abgr)); (byte (Tiff.GetB abgr))]
+    [| (byte (Tiff.GetR abgr)); (byte (Tiff.GetG abgr)); (byte (Tiff.GetB abgr)) |]
 
 
  // create a new image by loading an existing tiff file using BitMiracle Tiff library for .NET
@@ -70,8 +72,9 @@ let saveImage image filename =
 
 let BLUE = 0xFFFF0000 // ABGR
 
+
 // draw the (top left corner of the) original image but with the segment boundaries overlayed in blue
-let overlaySegmentation image filename N segmentation =
+let overlaySegmentation (image: Image) (filename: string) (N: int) (segmentation: Map<Coord, Segment>) =
     let width = 1 <<< N
     let height = 1 <<< N
 
@@ -79,8 +82,8 @@ let overlaySegmentation image filename N segmentation =
     let getOverlayColour i =
         let y = i / width;
         let x = i % width;
-        if x = width-1  || x = 0 || segmentation (x,y) <> segmentation (x-1,y) || 
-           y = height-1 || y = 0 || segmentation (x,y) <> segmentation (x,y-1) then
+        if x = width-1  || x = 0 || Map.find {x=x; y=y} segmentation  <> Map.find {x=x-1; y=y} segmentation || 
+           y = height-1 || y = 0 || Map.find {x=x; y=y} segmentation  <> Map.find {x=x; y=y-1} segmentation then
             BLUE
         else
             getColour image (x,y)

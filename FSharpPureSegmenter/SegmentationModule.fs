@@ -89,10 +89,10 @@ let createBestNeighbourFunction (neighbours:Segmentation->Segment->Set<Segment>)
     )                           
 
 // Determine whether segmentA is one of the best neighbours of segmentB
-let bestNeighbourChecker (bestNeighbours : Segmentation->Segment->Set<Segment>) (segmentation : Segmentation) : Segment->Segment->bool =
+let bestNeighbourChecker (bestNeighbours : Segmentation->Segment->Set<Segment>) (segmentation : Segmentation) : Segment-> Segment->bool =
     fun (segmentA: Segment) (segmentB: Segment) -> 
         let bestNeighboursOfSegmentB = bestNeighbours segmentation segmentB
-        Set.contains segmentA bestNeighboursOfSegmentB    
+        Set.contains segmentA bestNeighboursOfSegmentB   
     
 // Merge two segments by creating their parent and adding them to the segmentation
 let mergeSegments (segmentation : Segmentation) (segmentA: Segment) (segmentB: Segment) : Segmentation =
@@ -110,30 +110,6 @@ let mergeSegments (segmentation : Segmentation) (segmentA: Segment) (segmentB: S
 // otherwise, choose one of segmentA's best neighbours (if any) and try to grow it instead (gradient descent)
 let createTryGrowOneSegmentFunction (bestNeighbours:Segmentation->Segment->Set<Segment>) (pixelMap:Coordinate->Segment) : (Segmentation->Coordinate->Segmentation) =
     fun (segmentation : Segmentation) (coord : Coordinate) -> 
-//        ///// DEBUGGING HELPER
-//        let size = 8
-//        
-//        let coordToCSharpSegment (x : int) (y : int) : CSharpSegment =
-//            let pixel = CSharpPixel x y
-//            CSharpSegment
-        
-        //let segmentationView: CSharpSegment[,] = Array2D.init<Segment> size size ( fun x y -> findRoot (pixelMap )
-        
-        //let xs = [0 .. size-1]
-        //let ys = [0 .. size-1]
-//        
-//        for (x in xs) {
-//        
-//        }
-//        let coords = [0 .. size-1]
-//            |> List.map 
-//        
-        
-        //SegmentationIllustrator
-        
-        
-        
-        //
         let initialSegment = findRoot segmentation (pixelMap coord)
     
         let rec tryGrowOneSegment (segmentation: Segmentation) (segmentA: Segment) : Segmentation =              

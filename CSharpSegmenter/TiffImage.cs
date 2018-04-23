@@ -2,8 +2,6 @@
 
 namespace CSharpSegmenter
 { 
-    //public delegate object Segmentation(int x, int y);
-
     public class TiffImage
     {
         private int width, height;

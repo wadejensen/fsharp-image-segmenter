@@ -9,7 +9,7 @@ open System
 let main argv =    
 
     // load a Tiff image
-    let image = TiffModule.loadImage argv.[0]
+    let image = TiffModule.loadImage "C:\Users\WadeJensen\Dropbox\01_EN40\YEAR_5_SEM_1\SegmentationSkeleton\TestImages\L15-3662E-1902N-Q4.tif" //argv.[0]
 
     // testing using sub-image of size 32x32 pixels
     let N = 4

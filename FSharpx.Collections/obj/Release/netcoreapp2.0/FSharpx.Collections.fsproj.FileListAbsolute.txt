@@ -1,6 +1,0 @@
-C:\Users\WadeJensen\Dropbox\01_EN40\YEAR_5_SEM_1\SegmentationSkeleton\FSharpx.Collections\bin\Release\netcoreapp2.0\FSharpx.Collections.deps.json
-C:\Users\WadeJensen\Dropbox\01_EN40\YEAR_5_SEM_1\SegmentationSkeleton\FSharpx.Collections\bin\Release\netcoreapp2.0\FSharpx.Collections.dll
-C:\Users\WadeJensen\Dropbox\01_EN40\YEAR_5_SEM_1\SegmentationSkeleton\FSharpx.Collections\bin\Release\netcoreapp2.0\FSharpx.Collections.pdb
-C:\Users\WadeJensen\Dropbox\01_EN40\YEAR_5_SEM_1\SegmentationSkeleton\FSharpx.Collections\obj\Release\netcoreapp2.0\FSharpx.Collections.fsprojResolveAssemblyReference.cache
-C:\Users\WadeJensen\Dropbox\01_EN40\YEAR_5_SEM_1\SegmentationSkeleton\FSharpx.Collections\obj\Release\netcoreapp2.0\FSharpx.Collections.dll
-C:\Users\WadeJensen\Dropbox\01_EN40\YEAR_5_SEM_1\SegmentationSkeleton\FSharpx.Collections\obj\Release\netcoreapp2.0\FSharpx.Collections.pdb
